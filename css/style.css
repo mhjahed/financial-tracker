@@ -1,0 +1,157 @@
+/* ===========================
+   Custom Styles
+   =========================== */
+
+:root {
+    --primary-color: #0d6efd;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+    --dark-bg: #1a1a2e;
+    --dark-card: #16213e;
+    --dark-text: #e0e0e0;
+}
+
+/* Dark Theme */
+body.dark-theme {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+body.dark-theme .card {
+    background-color: var(--dark-card);
+    color: var(--dark-text);
+}
+
+body.dark-theme .table {
+    color: var(--dark-text);
+}
+
+body.dark-theme .modal-content {
+    background-color: var(--dark-card);
+    color: var(--dark-text);
+}
+
+body.dark-theme .form-control,
+body.dark-theme .form-select {
+    background-color: #2c2c3e;
+    color: var(--dark-text);
+    border-color: #444;
+}
+
+body.dark-theme .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Animations */
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Summary Cards */
+#summaryCards .card-title {
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+/* Table Actions */
+.action-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    margin: 0 2px;
+}
+
+/* Loading State */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 3rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+/* Chart Container */
+canvas {
+    max-height: 400px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #summaryCards .card-title {
+        font-size: 1.3rem;
+    }
+    
+    .table {
+        font-size: 0.875rem;
+    }
+    
+    .action-btn {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.4rem;
+    }
+}
+
+/* Print Button Pulse */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(13, 110, 253, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0); }
+}
+
+/* Success/Error States */
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.is-valid {
+    border-color: #198754;
+}
+
+/* Toast Styles */
+.toast.bg-success,
+.toast.bg-danger {
+    color: white;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Dark Theme Scrollbar */
+body.dark-theme ::-webkit-scrollbar-track {
+    background: #2c2c3e;
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb {
+    background: #555;
+}

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Financial Tracker</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark bg-primary shadow-sm no-print">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="bi bi-wallet2"></i> Monthly Financial Tracker
+            </span>
+            <div class="d-flex align-items-center gap-3">
+                <!-- Currency Selector -->
+                <select id="currencySelector" class="form-select form-select-sm" style="width: auto;">
+                    <option value="BDT" selected>BDT - ৳</option>
+                    <option value="USD">USD - $</option>
+                    <option value="EUR">EUR - €</option>
+                    <option value="GBP">GBP - £</option>
+                    <option value="INR">INR - ₹</option>
+                    <option value="JPY">JPY - ¥</option>
+                </select>
+                
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="btn btn-sm btn-light">
+                    <i class="bi bi-moon-fill"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container my-4">
+        
+        <!-- Summary Cards -->
+        <div class="row g-3 mb-4" id="summaryCards">
+            <div class="col-md-3">
+                <div class="card border-success">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-arrow-down-circle text-success"></i> Total Income
+                        </h6>
+                        <h3 class="card-title text-success mb-0" id="totalIncome">৳0.00</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-arrow-up-circle text-danger"></i> Total Expenses
+                        </h6>
+                        <h3 class="card-title text-danger mb-0" id="totalExpenses">৳0.00</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-primary">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-piggy-bank text-primary"></i> Net Savings
+                        </h6>
+                        <h3 class="card-title text-primary mb-0" id="netSavings">৳0.00</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-percent text-info"></i> Savings Rate
+                        </h6>
+                        <h3 class="card-title text-info mb-0" id="savingsRate">0%</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Month Filter -->
+        <div class="row mb-3 no-print">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-calendar-month"></i></span>
+                    <input type="month" id="monthFilter" class="form-control">
+                    <button class="btn btn-outline-secondary" onclick="clearFilter()">Clear</button>
+                </div>
+            </div>
+            <div class="col-md-6 text-end">
+                <button class="btn btn-outline-primary" onclick="showSection('dashboard')">
+                    <i class="bi bi-house"></i> Dashboard
+                </button>
+                <button class="btn btn-outline-info" onclick="showSection('charts')">
+                    <i class="bi bi-bar-chart"></i> Charts
+                </button>
+                <button class="btn btn-outline-success" onclick="window.print()">
+                    <i class="bi bi-printer"></i> Print
+                </button>
+                <button class="btn btn-outline-warning" onclick="exportCSV()">
+                    <i class="bi bi-download"></i> Export CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboardSection">
+            
+            <!-- Income Section -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Income</h5>
+                    <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#incomeModal" onclick="resetIncomeForm()">
+                        <i class="bi bi-plus-lg"></i> Add Income
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead class="table-success">
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th width="30%">Source</th>
+                                    <th width="20%">Category</th>
+                                    <th width="20%">Amount</th>
+                                    <th width="15%">Date</th>
+                                    <th width="10%" class="no-print">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="incomeTableBody">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No income entries yet. Click "Add Income" to start.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expense Section -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-dash-circle"></i> Expenses</h5>
+                    <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#expenseModal" onclick="resetExpenseForm()">
+                        <i class="bi bi-plus-lg"></i> Add Expense
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead class="table-danger">
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th width="30%">Description</th>
+                                    <th width="20%">Category</th>
+                                    <th width="20%">Amount</th>
+                                    <th width="15%">Date</th>
+                                    <th width="10%" class="no-print">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenseTableBody">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No expense entries yet. Click "Add Expense" to start.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Charts Section -->
+        <div id="chartsSection" style="display: none;">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="bi bi-graph-up"></i> Income vs Expenses Over Time</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Expense Breakdown</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-warning">
+                            <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Monthly Comparison</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Income Modal -->
+    <div class="modal fade" id="incomeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-plus-circle"></i> <span id="incomeModalTitle">Add Income</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="incomeForm">
+                        <input type="hidden" id="incomeId">
+                        <div class="mb-3">
+                            <label for="incomeSource" class="form-label">Source *</label>
+                            <input type="text" class="form-control" id="incomeSource" placeholder="e.g., Salary, Freelancing" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="incomeCategory" class="form-label">Category *</label>
+                            <select class="form-select" id="incomeCategory" required>
+                                <option value="">Select category</option>
+                                <option value="Salary">Salary</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Business">Business</option>
+                                <option value="Investment">Investment</option>
+                                <option value="Gift">Gift</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="incomeAmount" class="form-label">Amount *</label>
+                            <input type="number" class="form-control" id="incomeAmount" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="incomeDate" class="form-label">Date *</label>
+                            <input type="date" class="form-control" id="incomeDate" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" onclick="saveIncome()">
+                        <i class="bi bi-check-circle"></i> Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expense Modal -->
+    <div class="modal fade" id="expenseModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-dash-circle"></i> <span id="expenseModalTitle">Add Expense</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="expenseForm">
+                        <input type="hidden" id="expenseId">
+                        <div class="mb-3">
+                            <label for="expenseSource" class="form-label">Description *</label>
+                            <input type="text" class="form-control" id="expenseSource" placeholder="e.g., Rent, Groceries" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="expenseCategory" class="form-label">Category *</label>
+                            <select class="form-select" id="expenseCategory" required>
+                                <option value="">Select category</option>
+                                <option value="Housing">Housing (Rent/Mortgage)</option>
+                                <option value="Food">Food & Groceries</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Education">Education</option>
+                                <option value="Insurance">Insurance</option>
+                                <option value="Debt">Debt Payment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="expenseAmount" class="form-label">Amount *</label>
+                            <input type="number" class="form-control" id="expenseAmount" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="expenseDate" class="form-label">Date *</label>
+                            <input type="date" class="form-control" id="expenseDate" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="saveExpense()">
+                        <i class="bi bi-check-circle"></i> Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container position-fixed top-0 end-0 p-3 no-print">
+        <div id="toast" class="toast align-items-center border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 mt-5 bg-light no-print">
+        <p class="text-muted mb-0">
+            <i class="bi bi-wallet2"></i> Monthly Financial Tracker | 
+            <span id="currentYear"></span> | 
+            Made with <i class="bi bi-heart-fill text-danger"></i>
+        </p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    
+</body>
+</html>

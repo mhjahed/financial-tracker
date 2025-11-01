@@ -1,0 +1,116 @@
+/* ===========================
+   Print Styles
+   =========================== */
+
+@media print {
+    /* Hide non-printable elements */
+    .no-print {
+        display: none !important;
+    }
+    
+    /* Page Setup */
+    @page {
+        size: A4;
+        margin: 1cm;
+    }
+    
+    body {
+        background: white;
+        color: black;
+        font-size: 12pt;
+    }
+    
+    /* Cards */
+    .card {
+        border: 1px solid #dee2e6;
+        box-shadow: none;
+        page-break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+    
+    .card-header {
+        background-color: #f8f9fa !important;
+        color: black !important;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    /* Tables */
+    table {
+        page-break-inside: auto;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    
+    thead {
+        display: table-header-group;
+    }
+    
+    tfoot {
+        display: table-footer-group;
+    }
+    
+    /* Summary Cards */
+    #summaryCards {
+        display: flex !important;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+    
+    #summaryCards .col-md-3 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    /* Charts */
+    canvas {
+        max-height: 300px;
+        page-break-before: always;
+    }
+    
+    /* Header for Print */
+    body::before {
+        content: "Monthly Financial Tracker - Report";
+        display: block;
+        text-align: center;
+        font-size: 18pt;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #000;
+    }
+    
+    /* Footer for Print */
+    footer {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 10pt;
+        border-top: 1px solid #dee2e6;
+        padding: 0.5rem;
+    }
+    
+    /* Color Adjustments for Print */
+    .text-success,
+    .text-danger,
+    .text-primary,
+    .text-info {
+        color: black !important;
+    }
+    
+    .bg-success,
+    .bg-danger,
+    .bg-primary,
+    .bg-warning,
+    .bg-info {
+        background-color: #f8f9fa !important;
+        color: black !important;
+    }
+}
